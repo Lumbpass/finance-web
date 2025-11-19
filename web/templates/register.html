@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng ký</title>
+  <style>
+    body { background-color: #f9f9f9; font-family: Inter; display:flex; align-items:center; justify-content:center; height:100vh;}
+    form { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px #ffd700; }
+    input { width: 100%; margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    button { background-color: #ffcc00; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #ffb700; }
+  </style>
+</head>
+<body>
+  <form method="POST">
+    <h2>Đăng ký tài khoản</h2>
+    <input type="text" name="name" placeholder="Họ tên" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="password" name="password" placeholder="Mật khẩu" required />
+    <button type="submit">Đăng ký</button>
+    <p>Đã có tài khoản? <a href="{{ url_for('auth.login') }}">Đăng nhập</a></p>
+  </form>
+</body>
+</html>

@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="overview-container">
+
+    <!-- ====== 1. SUMMARY CARDS ====== -->
+    <div class="summary-row">
+        <div class="card">
+            <h3>Số dư hiện tại</h3>
+            <p class="value">{{ "{:,.0f}".format(balance) }} đ</p>
+        </div>
+
+        <div class="card">
+            <h3>Tổng thu</h3>
+            <p class="value positive">{{ "{:,.0f}".format(total_income) }} đ</p>
+        </div>
+
+        <div class="card">
+            <h3>Tổng chi</h3>
+            <p class="value negative">{{ "{:,.0f}".format(total_expenses) }} đ</p>
+        </div>
+    </div>
+
+    <!-- ====== 2. DONUT CHARTS HORIZONTAL ====== -->
+    <div class="donut-row">
+
+        <!-- Thu nhập -->
+        <div class="chart-section">
+            <h2>Thu nhập theo danh mục</h2>
+            {% if income_summary|length == 0 %}
+                <p class="empty-text">Không có thu nhập</p>
+            {% else %}
+                {% set total_income_sum = income_summary | sum(attribute='total') %}
+                <div class="donut" style="
+                    background: conic-gradient(
+                        {% set rotation = 0 %}
+                        {% for item in income_summary %}
+                            hsl({{ loop.index*70 }}, 80%, 50%) {{ (rotation/total_income_sum)*100 }}%, 
+                            hsl({{ loop.index*70 }}, 80%, 50%) {{ ((rotation + item.total)/total_income_sum)*100 }}%
+                            {% set rotation = rotation + item.total %}
+                            {% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    );
+                ">
+                    <div class="donut-center">Thu nhập</div>
+                </div>
+
+                <div class="legend">
+                    {% for item in income_summary %}
+                        <div class="legend-item">
+                            <span class="color-dot" style="background:hsl({{ loop.index*70 }},80%,50%)"></span>
+                            {{ item.category }} — {{ "{:,.0f}".format(item.total) }} đ
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Chi tiêu -->
+        <div class="chart-section">
+            <h2>Chi tiêu theo danh mục</h2>
+            {% if expense_summary|length == 0 %}
+                <p class="empty-text">Không có chi tiêu</p>
+            {% else %}
+                {% set total_expense_sum = expense_summary | sum(attribute='total') %}
+                <div class="donut" style="
+                    background: conic-gradient(
+                        {% set rotation = 0 %}
+                        {% for item in expense_summary %}
+                            hsl({{ loop.index*60 + 20 }}, 80%, 50%) {{ (rotation/total_expense_sum)*100 }}%, 
+                            hsl({{ loop.index*60 + 20 }}, 80%, 50%) {{ ((rotation + item.total)/total_expense_sum)*100 }}%
+                            {% set rotation = rotation + item.total %}
+                            {% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    );
+                ">
+                    <div class="donut-center">Chi tiêu</div>
+                </div>
+
+                <div class="legend">
+                    {% for item in expense_summary %}
+                        <div class="legend-item">
+                            <span class="color-dot" style="background:hsl({{ loop.index*60 + 20 }},80%,50%)"></span>
+                            {{ item.category }} — {{ "{:,.0f}".format(item.total) }} đ
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+/* ===== General container ===== */
+.overview-container {
+    background: #FFF8DC; /* vàng kem */
+    color: #000; /* chữ đen tổng thể */
+    padding: 20px;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+/* ===== Titles ===== */
+.overview-container h2, 
+.overview-container h3 {
+    color: #000;
+    font-weight: bold;
+}
+
+/* ===== Summary cards ===== */
+.summary-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+.card {
+    background: rgba(255,255,255,0.8); /* trong hơn để chữ nổi */
+    padding: 20px;
+    flex:1;
+    border-radius:12px;
+    text-align:center;
+    box-shadow: 0 0 10px #d4a373;
+}
+.card .value {
+    margin-top:10px;
+    font-size:24px;
+    font-weight:bold;
+}
+.value.balance { color: #10d917; } /* xanh lá */
+.value.positive { color:#2196f3; } /* xanh dương */
+.value.negative { color:#f44336; } /* đỏ */
+
+/* ===== Donut charts row ===== */
+.donut-row {
+    display:flex;
+    gap:50px;
+    justify-content:center;
+    flex-wrap: wrap;
+}
+.chart-section {
+    text-align:center;
+}
+
+/* ===== Donut chart ===== */
+.donut {
+    width:200px; height:200px;
+    border-radius:50%;
+    position:relative;
+    margin:10px auto;
+    display:flex; justify-content:center; align-items:center;
+    font-weight:bold;
+    color:#000; /* chữ trên donut */
+}
+.donut-center {
+    width:100px; height:100px;
+    background:#FFF8DC;
+    border-radius:50%;
+    display:flex; justify-content:center; align-items:center;
+    font-weight:bold;
+    color:#000;
+}
+.legend {
+    text-align:left;
+    display:inline-block;
+    margin-top:10px;
+}
+.legend-item {
+    margin-bottom:5px;
+    font-weight:bold;
+    color:#000;
+}
+.color-dot {
+    display:inline-block; width:14px; height:14px; border-radius:50%; margin-right:8px;
+}
+
+/* ===== Empty text ===== */
+.empty-text {
+    color:#000; /* chữ đen để đọc rõ */
+    font-weight:bold;
+}
+</style>
+
+
+{% endblock %}

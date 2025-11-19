@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  body {
+    background-color: #fdfcf7;
+    color: #222;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1.title {
+    text-align: center;
+    color: #d4af37;
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 26px;
+    text-shadow: 0 0 4px rgba(255, 215, 0, 0.4);
+  }
+
+  .filter-container {
+    background: #fff9e6;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid #ffe88a;
+  }
+
+  .filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .filter-group label {
+    font-weight: 600;
+    margin-right: 6px;
+    color: #333;
+  }
+
+  .filter-group select,
+  .filter-group input {
+    border: 1px solid #d4af37;
+    border-radius: 6px;
+    padding: 7px 10px;
+    background-color: #fff;
+    color: #333;
+    font-weight: 500;
+    outline: none;
+  }
+
+  .filter-group input:focus,
+  .filter-group select:focus {
+    border-color: #f1c40f;
+    box-shadow: 0 0 4px rgba(241, 196, 15, 0.4);
+  }
+
+  .filter-btn {
+    background-color: #d4af37;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.25s;
+  }
+
+  .filter-btn:hover {
+    background-color: #b7922a;
+  }
+
+  .add-btn {
+    background: linear-gradient(45deg, #f1c40f, #ffdf6b);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    transition: 0.3s;
+  }
+
+  .add-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(45deg, #ffdf6b, #f1c40f);
+  }
+
+  .summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 20px 0;
+  }
+
+  .summary .box {
+    flex: 1;
+    background: #fff9e6;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ffe88a;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-weight: 500;
+  }
+
+  .summary .green b { color: #00994d; }
+  .summary .red b { color: #d11a2a; }
+  .summary .blue b { color: #0066cc; }
+
+  .transaction-list {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #f7d774;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .transaction-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding: 10px;
+    border-bottom: 1px solid #f0e2b6;
+    align-items: center;
+  }
+
+  .transaction-row:last-child {
+    border-bottom: none;
+  }
+
+  .transaction-row.income .t-amount { color: #00994d; font-weight: bold; }
+  .transaction-row.expense .t-amount { color: #d11a2a; font-weight: bold; }
+
+  .transaction-row:hover {
+    background-color: #fffbe2;
+    transition: 0.3s;
+  }
+
+  .t-actions a {
+    margin: 0 5px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s;
+  }
+
+  .btn-edit { background-color: #3498db; color: #fff; }
+  .btn-delete { background-color: #e74c3c; color: #fff; }
+
+  .btn-edit:hover { background-color: #2980b9; }
+  .btn-delete:hover { background-color: #c0392b; }
+
+  .no-data {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-style: italic;
+  }
+</style>
+
+<h1 class="title">QUẢN LÍ CHI TIÊU CÁ NHÂN</h1>
+
+<!-- FILTERS + ADD BUTTON -->
+<div class="filter-container">
+  <form method="get" action="{{ url_for('index') }}" class="filter-form">
+    <!-- ================== FILTER BOX ================== -->
+    <div class="filter-container">
+      <form action="/transactions" method="get" class="filter-form">
+
+        <label for="type">Loại:</label>
+        <select name="type" id="type">
+            <option value="expense">Chi tiêu</option>
+            <option value="income">Thu nhập</option>
+        </select>
+
+        <label for="category">Danh mục:</label>
+        <select name="category" id="category">
+            <!-- sẽ được cập nhật bằng JS -->
+        </select>
+
+        <label>Khoảng tiền:</label>
+
+    <div class="range-slider">
+      <input type="range" id="minRange" name="min_amount" min="0" max="20000000" value="0">
+      <input type="range" id="maxRange" name="max_amount" min="0" max="20000000" value="20000000">
+    </div>
+
+    <div class="range-values">
+      <span id="minVal">0</span> ₫ → <span id="maxVal">20,000,000</span> ₫
+    </div>
+    <label for="start_date">Từ ngày:</label>
+    <input type="date" id="start_date" name="start_date">
+
+    <label for="end_date">Đến ngày:</label>
+    <input type="date" id="end_date" name="end_date">
+
+        <button type="submit" class="filter-btn">Filter</button>
+      </form>
+    </div>
+<!-- ================== END FILTER BOX ================== --> 
+
+<script>
+    const categories = {
+        expense: ["Ăn uống", "Mua sắm", "Nhà cửa", "Di chuyển", "Giải trí"],
+        income: ["Lương", "Thưởng", "Quà tặng", "Đầu tư"]
+    };
+
+    const typeSelect = document.getElementById("type");
+    const categorySelect = document.getElementById("category");
+
+    function updateCategories() {
+        const selectedType = typeSelect.value;
+        categorySelect.innerHTML = "";
+        categories[selectedType].forEach(cat => {
+            const option = document.createElement("option");
+            option.value = cat;
+            option.textContent = cat;
+            categorySelect.appendChild(option);
+        });
+    }
+
+    typeSelect.addEventListener("change", updateCategories);
+    updateCategories();
+</script>
+
+<style>
+.range-slider {
+  width: 220px;
+  position: relative;
+}
+
+.range-slider input[type=range] {
+  position: absolute;
+  width: 100%;
+  pointer-events: none;
+  height: 6px;
+}
+
+.range-slider input[type=range]::-webkit-slider-thumb {
+  pointer-events: all;
+  width: 14px;
+  height: 14px;
+  background: #d4af37;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.range-values {
+  margin-top: 28px;
+  font-weight: 600;
+}
+</style>
+
+<script>
+const minRange = document.getElementById("minRange");
+const maxRange = document.getElementById("maxRange");
+const minVal = document.getElementById("minVal");
+const maxVal = document.getElementById("maxVal");
+
+minRange.addEventListener("input", () => {
+    if (parseInt(minRange.value) > parseInt(maxRange.value) - 100000) {
+        minRange.value = parseInt(maxRange.value) - 100000;
+    }
+    minVal.textContent = parseInt(minRange.value).toLocaleString();
+});
+
+maxRange.addEventListener("input", () => {
+    if (parseInt(maxRange.value) < parseInt(minRange.value) + 100000) {
+        maxRange.value = parseInt(minRange.value) + 100000;
+    }
+    maxVal.textContent = parseInt(maxRange.value).toLocaleString();
+});
+</script>
+
+  <a href="{{ url_for('add_transaction_page') }}" class="add-btn">+ Add Transaction</a>
+</div>
+
+<!-- SUMMARY -->
+<section class="summary">
+  <div class="box green">
+    Số dư hiện tại<br><b>{{ "{:,.0f}".format(balance) }} ₫</b>
+  </div>
+  <div class="box blue">
+    Tổng thu trong kỳ<br><b>{{ "{:,.0f}".format(total_income) }} ₫</b>
+  </div>
+  <div class="box red">
+    Tổng chi trong kỳ<br><b>{{ "{:,.0f}".format(total_expenses) }} ₫</b>
+  </div>
+</section>
+
+<!-- TRANSACTIONS -->
+<div class="transaction-list">
+  {% if transactions %}
+    {% for t in transactions %}
+    <div class="transaction-row {% if t.amount < 0 %}expense{% else %}income{% endif %}">
+      <div class="t-date">{{ t.date }}</div>
+      <div class="t-category">{{ t.category }}</div>
+      <div class="t-note">{{ t.note }}</div>
+      <div class="t-amount">{{ "{:,.0f}".format(t.amount) }} ₫</div>
+
+      <div class="t-actions">
+        <a href="{{ url_for('edit_transaction', tx_id=t._id) }}" class="btn-edit">Sửa</a>
+        <a href="{{ url_for('delete_transaction', tx_id=t._id) }}" class="btn-delete">Xóa</a>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="no-data">Chưa có giao dịch nào.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

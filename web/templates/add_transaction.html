@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="color:#fff; text-shadow:0 0 8px #b14eff;">Add Transaction</h2>
+
+<form method="post" class="transaction-form" style="max-width:500px;margin:auto;">
+  <label for="type">Type:</label>
+  <select name="type" id="type" required>
+    <option value="income">Income</option>
+    <option value="expense">Expense</option>
+  </select>
+
+    <label for="category">Category:</label>
+    <select name="category" id="category" required>
+        <option value="Salary">Salary</option>
+        <option value="Food & Drink">Food & Drink</option>
+        <option value="Home">Home</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Transport">Transport</option>
+    </select>
+
+  <label for="amount">Amount:</label>
+  <input type="number" name="amount" id="amount" step="0.01" required>
+
+  <label for="note">Note:</label>
+  <input type="text" name="note" id="note">
+
+  <label for="date">Date:</label>
+  <input type="date" name="date" id="date" required>
+
+  <button type="submit" class="add-btn">💾 Save Transaction</button>
+</form>
+
+<style>
+.transaction-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #ffefb0; /* nền vàng kem */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px #ffd54f;
+}
+
+.transaction-form label {
+    color: #5a3e00; /* nâu đậm */
+    font-weight: 600;
+}
+
+.transaction-form input,
+.transaction-form select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #e6c76f;
+    background: #fff9d6; /* vàng nhạt hơn input */
+    color: #333;
+    outline: none;
+    font-weight: 500;
+}
+
+.transaction-form input:focus,
+.transaction-form select:focus {
+    box-shadow: 0 0 8px #d4af37;
+    border-color: #d4af37;
+}
+
+.add-btn {
+    background: #d4af37;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-btn:hover {
+    background: #b7922a;
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Filter Transactions</title>
+</head>
+<body>
+<h1>Lọc giao dịch</h1>
+
+<form method="GET" action="/filter">
+    <label>Phân loại:</label>
+    <select id="classification" name="classification" onchange="updateCategory()">
+        <option value="Chi tiêu">Chi tiêu</option>
+        <option value="Thu nhập">Thu nhập</option>
+    </select>
+
+    <label>Danh mục:</label>
+    <select id="category" name="category"></select>
+
+    <label>Số tiền tối thiểu:</label>
+    <input type="number" name="min" value="0">
+
+    <label>Số tiền tối đa:</label>
+    <input type="number" name="max" value="10000000">
+
+    <label>Từ ngày:</label>
+    <input type="date" name="start_date">
+
+    <label>Đến ngày:</label>
+    <input type="date" name="end_date">
+
+    <button type="submit">Lọc</button>
+</form>
+
+<script>
+function updateCategory() {
+    const type = document.getElementById("classification").value;
+    const categorySelect = document.getElementById("category");
+    categorySelect.innerHTML = "";
+
+    const categories = {
+        "Chi tiêu": ["Ăn uống", "Mua sắm", "Hóa đơn", "Đi lại"],
+        "Thu nhập": ["Lương", "Thưởng", "Lãi suất", "Khác"]
+    };
+
+    categories[type].forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c;
+        opt.textContent = c;
+        categorySelect.appendChild(opt);
+    });
+}
+
+updateCategory(); // chạy khi load
+</script>
+</body>
+</html>

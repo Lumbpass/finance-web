@@ -1,0 +1,198 @@
+/* Reset / base */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { 
+  font-family: "Segoe UI", Roboto, Arial, sans-serif; 
+  background: #fff8dc; /* vàng kem */
+  color: #333; 
+}
+
+/* Top promo bar */
+.top-bar { background:#ffd54f; color:#333; padding:10px 0; }
+.top-bar-inner { width:1100px; margin:0 auto; display:flex; justify-content:center; gap:10px; align-items:center; }
+.top-bar .top-link { color: #805b00; text-decoration:underline; margin-left:8px; }
+
+/* Header */
+.main-header {
+  width:1100px;
+  margin:18px auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background: rgba(255, 237, 188, 0.8);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  padding: 10px 20px;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+}
+.header-left { display:flex; align-items:center; gap:12px; }
+.logo-circle { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,#ffe082,#ffecb3); display:flex; align-items:center; justify-content:center; font-weight:bold; }
+.wallet-title .breadcrumb { color:#6b7280; font-size:14px; display:flex; gap:6px; align-items:center; }
+.main-nav .nav-item { margin:0 12px; color:#8d6e00; text-decoration:none; padding:8px 10px; border-radius:6px; }
+.main-nav .nav-item.active { color:#ffb300; border-bottom: 2px solid #ffb300; }
+.header-right { display:flex; align-items:center; gap:8px; color:#6b7280; }
+.avatar { width:36px; height:36px; border-radius:50%; background:#ffc107; color:white; display:flex; align-items:center; justify-content:center; }
+
+/* Layout */
+.layout { width:1100px; margin: 0 auto 60px; display:flex; gap:20px; }
+.sidebar { width:70px; }
+.sidebar-icons { background:transparent; display:flex; flex-direction:column; gap:10px; padding-top:20px; }
+.sidebar .icon { width:44px; height:44px; border-radius:8px; background:#fff3e0; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 3px rgba(0,0,0,0.05); }
+
+/* Content area */
+.content { flex:1; background:transparent; padding:6px 0; }
+
+.page-header h1 { font-size:20px; color:#6b4f00; margin-bottom:14px; }
+
+/* settings panel */
+.settings-container { background:#fff8dc; border-radius:8px; padding:22px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+.settings-panel h3 { font-size:16px; margin-bottom:12px; color:#6b4f00; }
+
+.categories-list { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+
+/* each row */
+.category-row { display:flex; align-items:center; justify-content:space-between; padding:12px; border-radius:8px; background:#fff3e0; }
+.category-row.alt { background:#fff8dc; } /* alternating background */
+.col-left { display:flex; align-items:center; gap:14px; min-width:420px; }
+.cat-icon { width:34px; height:34px; border-radius:50%; background:#fff5e1; display:flex; align-items:center; justify-content:center; font-size:16px; }
+.cat-name { font-weight:600; color:#6b4f00; }
+.col-mid { color:#9e7c00; }
+.col-actions { display:flex; gap:8px; }
+.action-btn { display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:8px; text-decoration:none; font-size:16px; }
+.action-btn.edit { background:#fff9c4; color:#ffb300; }
+.action-btn.view { background:#fffde7; color:#ffa000; }
+.action-btn.delete { background:#ffe0b2; color:#e65100; }
+
+/* small muted text */
+.muted { color:#9e7c00; font-size:13px; }
+
+/* help button */
+.help-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 22px;
+  background:#ffb300;
+  color:#fff;
+  padding:12px 16px;
+  border-radius:40px;
+  text-decoration:none;
+  box-shadow:0 6px 20px rgba(255,179,0,0.3);
+  font-weight:600;
+}
+
+/* Responsive: center container on smaller screens */
+@media (max-width:1200px) {
+  .top-bar-inner, .main-header, .layout { width: 95%; }
+}
+
+/* Filter */
+.filter-container {
+  background: #fff3e0;
+  padding: 16px 20px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+.filter-group label {
+  font-weight: 500;
+  margin-right: 6px;
+  color:#6b4f00;
+}
+.filter-group input,
+.filter-group select {
+  padding: 6px 8px;
+  border: 1px solid #ffcc80;
+  border-radius: 6px;
+  background:#fff8dc;
+  color:#6b4f00;
+}
+.filter-btn {
+  background: linear-gradient(90deg, #ffb300, #ffc107);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+/* Transaction list */
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.transaction-row {
+  background: #fff3e0;
+  border: 1px solid #ffcc80;
+  color: #6b4f00;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.transaction-row:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 12px rgba(255,179,0,0.4);
+}
+.transaction-row.expense .t-amount { color: #e65100; }
+.transaction-row.income .t-amount { color: #ffb300; }
+.t-date { color: #9e7c00; font-size: 14px; }
+.t-category { font-weight: 600; }
+.t-note { color: #6b4f00; font-size: 15px; }
+.t-amount { text-align: right; font-weight: 600; }
+.no-data { text-align: center; color: #9e7c00; padding: 20px; }
+
+/* Add button */
+.add-btn {
+  background: linear-gradient(90deg, #ffb300, #ffc107);
+  color: #fff;
+  text-decoration: none;
+  padding: 14px 26px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 15px #ffb300, 0 0 25px #ffc107;
+  transition: 0.25s ease-in-out;
+}
+.add-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #ffc107, 0 0 40px #ffe082;
+}
+
+/* Edit & Delete buttons */
+.t-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+.btn-edit, .btn-delete {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.btn-edit {
+  background: #ffcc80;
+  color: #6b4f00;
+}
+.btn-edit:hover {
+  background: #ffd54f;
+  box-shadow: 0 0 8px #ffd54f;
+}
+.btn-delete {
+  background: #ffab91;
+  color: #6b4f00;
+}
+.btn-delete:hover {
+  background: #ff8a65;
+  box-shadow: 0 0 8px #ff8a65;
+}

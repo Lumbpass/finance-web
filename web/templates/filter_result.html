@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Kết quả lọc</title>
+</head>
+<body>
+<h1>Kết quả lọc</h1>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <th>Ngày</th>
+        <th>Phân loại</th>
+        <th>Danh mục</th>
+        <th>Số tiền</th>
+    </tr>
+
+    {% for t in results %}
+    <tr>
+        <td>{{ t.date }}</td>
+        <td>{{ t.type }}</td>
+        <td>{{ t.category }}</td>
+        <td>{{ "{:,.0f}".format(t.amount) }} đ</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="/filter">Quay lại lọc</a>
+</body>
+</html>

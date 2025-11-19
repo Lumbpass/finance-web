@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{ title or "FinanceWeb" }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <!-- Top promo bar -->
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <span>YOUR FINANCE</span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="header-left">
+      <div class="logo-circle">S</div>
+      <div class="wallet-title">
+        <div class="breadcrumb"> <span>›</span> <strong>{{ wallet.name if wallet else "My Wallet" }}</strong></div>
+      </div>
+    </div>
+
+    <nav class="main-nav">
+      <a href="{{ url_for('index') }}" class="nav-item">Transactions</a>
+      <a href="{{ url_for('overview') }}" class="nav-item">Overview</a>
+      <a href="#" class="nav-item">Budgets</a>
+      <a href="{{ url_for('wallet_settings') }}" class="nav-item active">Wallet Settings</a>
+    </nav>
+
+    
+  </header>
+
+  <!-- Layout: left sidebar + main content -->
+  <div class="layout">
+    <aside class="sidebar">
+      <!-- simplified icons column to mimic Spendee leftbar -->
+      <div class="sidebar-icons">
+        <div class="icon">🏠</div>
+        <div class="icon">💸</div>
+        <!-- Icon răng cưa và menu dropdown -->
+<div style="position: relative; display: inline-block;">
+    <!-- Nút răng cưa -->
+    <button id="settingsButton" 
+            style="background: none; border: none; font-size: 20px; cursor: pointer;">
+        ⚙️
+    </button>
+
+    <!-- Menu thả xuống -->
+    <div id="settingsMenu"
+         style="display: none; position: absolute; right: 0; background: white; 
+                box-shadow: 0px 4px 8px rgba(0,0,0,0.2); border-radius: 8px; 
+                padding: 8px; z-index: 100;">
+        <a href="{{ url_for('auth.settings') }}" 
+           style="display:block;padding:10px;text-decoration:none;color:black;">
+           ⚙️ Settings
+        </a>
+        <a href="{{ url_for('auth.logout') }}" 
+           style="display:block;padding:10px;text-decoration:none;color:black;">
+           🚪 Logout
+        </a>
+    </div>
+</div>
+
+<script>
+    const button = document.getElementById("settingsButton");
+    const menu = document.getElementById("settingsMenu");
+
+    button.addEventListener("click", (event) => {
+        event.stopPropagation(); // Ngăn click lan ra ngoài
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+    });
+
+    // Click ra ngoài thì ẩn menu
+    window.addEventListener("click", () => {
+        menu.style.display = "none";
+    });
+</script>
+
+      </div>
+    </aside>
+
+    <main class="content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <!-- Help floating -->
+  <a class="help-btn" href="#">Help</a>
+
+</body>
+</html>
+
+<style>
+.transaction-card {
+  background-color: #fff3b0; /* vàng kem */
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  color: #333333; /* chữ tối nổi bật trên nền sáng */
+  box-shadow: 0 0 15px #ffd54f; /* viền sáng, hơi vàng */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-actions a {
+  margin-left: 10px;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: 0.2s;
+  font-weight: 600;
+}
+
+.edit-btn {
+  background-color: #fbc02d; /* vàng nổi bật */
+  color: #1a1a1a; /* chữ tối để đọc rõ */
+  box-shadow: 0 0 10px #ffeb3b;
+}
+.edit-btn:hover {
+  background-color: #ffee58;
+  box-shadow: 0 0 15px #fff176;
+}
+
+.delete-btn {
+  background-color: #e53935; /* đỏ nổi bật */
+  color: #fff;
+  box-shadow: 0 0 10px #ef9a9a;
+}
+.delete-btn:hover {
+  background-color: #f44336;
+  box-shadow: 0 0 15px #ef5350;
+}
+</style>
+
+
