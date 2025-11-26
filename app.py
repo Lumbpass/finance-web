@@ -78,7 +78,7 @@ def add_transaction_page():
         print("Inserted ID:", inserted.inserted_id)
         return redirect(url_for('index'))
 
-    return render_template('add_transaction.html')
+    return render_template('add_transaction.html',  CATEGORY_MAP=CATEGORY_MAP)
 
 
 @app.route('/edit/<tx_id>', methods=['GET', 'POST'])
@@ -110,7 +110,7 @@ def edit_transaction(tx_id):
         transactions_col.update_one({"_id": ObjectId(tx_id)}, {"$set": updated_tx})
         return redirect(url_for('index'))
 
-    return render_template('edit_transaction.html', tx=tx)
+    return render_template('edit_transaction.html', tx=tx, CATEGORY_MAP=CATEGORY_MAP)
 
 
 @app.route('/delete/<tx_id>')

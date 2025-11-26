@@ -24,6 +24,36 @@
   <button type="submit" class="add-btn">💾 Save Changes</button>
 </form>
 
+<script>
+    // Lấy danh sách category từ Flask
+    const CATEGORY_MAP = JSON.parse(`{{ CATEGORY_MAP | tojson | safe }}`);
+
+    function updateCategory(selected = null) {
+        const type = document.getElementById("type").value;
+        const categorySelect = document.getElementById("category");
+
+        categorySelect.innerHTML = "";
+
+        const categories = CATEGORY_MAP[type];
+
+        for (const key in categories) {
+            const option = document.createElement("option");
+            option.value = key;
+            option.textContent = categories[key];
+
+            // Nếu đang edit → chọn đúng category cũ
+            if (selected === key) {
+                option.selected = true;
+            }
+
+            categorySelect.appendChild(option);
+        }
+    }
+
+    // Khi load trang lần đầu, load đúng type + category của giao dịch
+    updateCategory("{{ tx.category }}");
+</script>
+
 <style>
 .transaction-form {
     display: flex;

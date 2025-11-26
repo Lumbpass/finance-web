@@ -10,13 +10,40 @@
   </select>
 
     <label for="category">Danh mục:</label>
-    <select name="category" id="category" required>
-        <option value="Salary">Lương</option>
-        <option value="Food & Drink">Đồ ăn & đồ uống</option>
-        <option value="Home">Thuê nhà</option>
-        <option value="Shopping">Mua sắm</option>
-        <option value="Transport">Di chuyển</option>
-    </select>
+    <select name="category" id="category" required></select>
+    <script>
+    // Nhận CATEGORY_MAP từ Flask
+    const CATEGORY_MAP = {{ CATEGORY_MAP | tojson }};
+
+    function updateCategory() {
+        const type = document.getElementById("type").value;
+        const categorySelect = document.getElementById("category");
+
+        // Xóa toàn bộ option cũ
+        categorySelect.innerHTML = "";
+
+        // Nếu không có type thì dừng
+        if (!CATEGORY_MAP[type]) {
+            return;
+        }
+
+        // Lấy danh sách category theo type
+        const categories = CATEGORY_MAP[type];
+
+        // Thêm option mới
+        for (const key in categories) {
+            if (categories.hasOwnProperty(key)) {
+                const option = document.createElement("option");
+                option.value = key;
+                option.textContent = categories[key];
+                categorySelect.appendChild(option);
+            }
+        }
+    }
+
+    // Gọi lần đầu
+    updateCategory();
+</script>
 
   <label for="amount">Tổng giá trị:</label>
   <input type="number" name="amount" id="amount" step="0.01" required>
