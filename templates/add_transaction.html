@@ -10,30 +10,30 @@
   </select>
 
     <label for="category">Danh mục:</label>
-    <select name="category" id="category" required></select>
+    <select name="category" id="category-select" required></select>
     <script>
         const CATEGORY_MAP = {{ CATEGORY_MAP | tojson }};
+        const typeSelect = document.getElementById("type-select");
+        const categorySelect = document.getElementById("category-select");
 
         function updateCategoryOptions(type) {
-        const select = document.getElementById("category-select");
-        select.innerHTML = "";
-
-        if (!CATEGORY_MAP[type]) return;
+        categorySelect.innerHTML = ""; // Xóa toàn bộ option cũ
 
         CATEGORY_MAP[type].forEach(cat => {
-            const opt = document.createElement("option");
+            let opt = document.createElement("option");
             opt.value = cat;
             opt.textContent = cat;
-            select.appendChild(opt);
+            categorySelect.appendChild(opt);
         });
     }
 
-    document.querySelectorAll("input[name='type']").forEach(radio => {
-        radio.addEventListener("change", e => updateCategoryOptions(e.target.value));
-    });
+    // chạy mặc định theo selected value ban đầu
+    updateCategoryOptions(typeSelect.value);
 
-    // Load mặc định theo loại đang check
-    updateCategoryOptions(document.querySelector("input[name='type']:checked").value);
+    // Cập nhật khi đổi type
+    typeSelect.addEventListener("change", () => {
+        updateCategoryOptions(typeSelect.value);
+    });
     </script>
 
   <label for="amount">Tổng giá trị:</label>
