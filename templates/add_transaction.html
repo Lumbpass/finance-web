@@ -3,31 +3,31 @@
 <h2 style="color:#fff; text-shadow:0 0 8px #b14eff;">Add Transaction</h2>
 
 <form method="post" class="transaction-form" style="max-width:500px;margin:auto;">
-  <label for="type">Type:</label>
+  <label for="type">Loại:</label>
   <select name="type" id="type" required>
-    <option value="income">Income</option>
-    <option value="expense">Expense</option>
+    <option value="income">Thu nhập</option>
+    <option value="expense">Chi tiêu</option>
   </select>
 
-    <label for="category">Category:</label>
+    <label for="category">Danh mục:</label>
     <select name="category" id="category" required>
-        <option value="Salary">Salary</option>
-        <option value="Food & Drink">Food & Drink</option>
-        <option value="Home">Home</option>
-        <option value="Shopping">Shopping</option>
-        <option value="Transport">Transport</option>
+        <option value="Salary">Lương</option>
+        <option value="Food & Drink">Đồ ăn & đồ uống</option>
+        <option value="Home">Thuê nhà</option>
+        <option value="Shopping">Mua sắm</option>
+        <option value="Transport">Di chuyển</option>
     </select>
 
-  <label for="amount">Amount:</label>
+  <label for="amount">Tổng giá trị:</label>
   <input type="number" name="amount" id="amount" step="0.01" required>
 
-  <label for="note">Note:</label>
+  <label for="note">Ghi chú:</label>
   <input type="text" name="note" id="note">
 
   <label for="date">Date:</label>
   <input type="date" name="date" id="date" required>
 
-  <button type="submit" class="add-btn">💾 Save Transaction</button>
+  <button type="submit" class="add-btn">💾 Lưu giao dịch</button>
 </form>
 
 <style>

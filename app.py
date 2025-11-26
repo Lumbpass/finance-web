@@ -13,7 +13,12 @@ app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), 't
 app.secret_key = "mysecretkey"  # dùng để lưu session
 bcrypt.init_app(app)
 # --- Kết nối MongoDB ---
-client = MongoClient("mongodb+srv://MyFinance_db_user:MyFinaNceWebsite@cluster0.2z74lfk.mongodb.net/")
+MONGO_URI = os.getenv("MONGO_URI")
+
+if not MONGO_URI:
+    print("❌ ERROR: MONGO_URI is missing! Did you set Railway Variables?")
+    raise SystemExit()
+client = MongoClient(MONGO_URI)
 db = client["expense_tracker"]
 transactions_col = db ["transactions"]
 wallet_col = db ['wallet'] # ✅ đổi sang VNĐ
@@ -29,7 +34,7 @@ def index():
     if 'user_id' not in session:     # ← session phải import
         return redirect(url_for('auth.login'))
     
-    transactions_data = get_all_transactions()
+    transactions_data = list(transactions_col.find({"user_id": session["user_id"]}))
     for t in transactions_data:
         t["_id"] = str(t["_id"])
 
@@ -54,6 +59,7 @@ def index():
 def add_transaction_page():
     if request.method == 'POST':
         new_tx = {
+            "user_id": session["user_id"],
             "type": request.form["type"],
             "category": request.form["category"],
             "note": request.form["note"],
@@ -79,7 +85,7 @@ def add_transaction_page():
 def edit_transaction(tx_id):
     print("TX_ID:", tx_id)
     try:
-        tx = transactions_col.find_one({"_id": ObjectId(tx_id)})
+        tx = transactions_col.find_one({"_id": ObjectId(tx_id), "user_id": session["user_id"]})
     except:
         return "Invalid transaction ID", 400
     
@@ -111,7 +117,7 @@ def edit_transaction(tx_id):
 def delete_transaction(tx_id):
     print("TX_ID:", tx_id)
     try:
-        transactions_col.delete_one({"_id": ObjectId(tx_id)})
+        transactions_col.delete_one({"_id": ObjectId(tx_id), "user_id": session["user_id"]})
     except:
         return "Invalid transaction ID", 400
     return redirect(url_for('index'))
@@ -119,15 +125,19 @@ def delete_transaction(tx_id):
 
 @app.route('/settings', methods=['GET', 'POST'])
 def wallet_settings():
-    wallet_data = get_wallet() or {"name": "My Wallet", "balance": 0, "currency": "VNĐ"}  # ✅ mặc định VNĐ
+    wallet_data = wallet_col.find_one({"user_id": session["user_id"]})
 
     if request.method == 'POST':
         name = request.form["name"]
         balance = float(request.form["balance"])
         currency = "VNĐ"  # ✅ khóa cứng đơn vị VNĐ cho đồng bộ
 
-        wallet_col.delete_many({})
-        wallet_col.insert_one({"name": name, "balance": balance, "currency": currency})
+        wallet_col.delete_many({"user_id": session["user_id"]})
+        wallet_col.insert_one({
+            "user_id": session["user_id"],
+            "name": name, 
+            "balance": balance, 
+            "currency": currency})
         return redirect(url_for('index'))
 
     return render_template('wallet_settings.html', wallet=wallet_data)
@@ -182,7 +192,7 @@ def filter_data():
 
 @app.route("/overview")
 def overview():
-    transactions = list(transactions_col.find())
+    transactions = list(transactions_col.find({"user_id": session["user_id"]}))
 
     total_income = sum(t["amount"] for t in transactions if t["amount"] > 0)
     total_expenses = sum(t["amount"] for t in transactions if t["amount"] < 0)
