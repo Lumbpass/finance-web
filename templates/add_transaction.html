@@ -10,31 +10,17 @@
   </select>
 
     <label for="category">Danh mục:</label>
-    <select name="category" id="category-select" required></select>
-    <script>
-        const CATEGORY_MAP = {{ CATEGORY_MAP | tojson }};
-        const typeSelect = document.getElementById("type-select");
-        const categorySelect = document.getElementById("category-select");
-
-        function updateCategoryOptions(type) {
-        categorySelect.innerHTML = ""; // Xóa toàn bộ option cũ
-
-        CATEGORY_MAP[type].forEach(cat => {
-            let opt = document.createElement("option");
-            opt.value = cat;
-            opt.textContent = cat;
-            categorySelect.appendChild(opt);
-        });
-    }
-
-    // chạy mặc định theo selected value ban đầu
-    updateCategoryOptions(typeSelect.value);
-
-    // Cập nhật khi đổi type
-    typeSelect.addEventListener("change", () => {
-        updateCategoryOptions(typeSelect.value);
-    });
-    </script>
+    <select name="category" id="category" required>
+        <option value="Salary">Lương</option>
+        <option value="Food & Drink">Đồ ăn & đồ uống</option>
+        <option value="Home">Thuê nhà</option>
+        <option value="Shopping">Mua sắm</option>
+        <option value="Transport">Di chuyển</option>
+        <option value="Bonus">Thưởng</option>
+        <option value="Gift">Quà tặng</option>
+        <option value="Investment">Đầu tư</option>
+        <option value="Entertainment">giải trí</option>
+    </select>
 
   <label for="amount">Tổng giá trị:</label>
   <input type="number" name="amount" id="amount" step="0.01" required>
@@ -42,7 +28,7 @@
   <label for="note">Ghi chú:</label>
   <input type="text" name="note" id="note">
 
-  <label for="date">Date:</label>
+  <label for="date">Ngày:</label>
   <input type="date" name="date" id="date" required>
 
   <button type="submit" class="add-btn">💾 Lưu giao dịch</button>

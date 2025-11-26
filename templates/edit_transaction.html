@@ -22,34 +22,6 @@
   <input type="number" step="0.01" name="amount" value="{{ tx.amount }}" required>
 
   <button type="submit" class="add-btn">💾 Lưu thay đổi</button>
-
-  <script>
-    const CATEGORY_MAP = {{ CATEGORY_MAP | tojson }};
-    const typeSelect = document.getElementById("type-select");
-    const categorySelect = document.getElementById("category-select");
-    const currentCategory = "{{ tx.category }}";  // category hiện tại trong DB
-
-    function updateCategoryOptions(type) {
-        categorySelect.innerHTML = "";
-
-        CATEGORY_MAP[type].forEach(cat => {
-            let opt = document.createElement("option");
-            opt.value = cat;
-            opt.textContent = cat;
-
-            if (cat === currentCategory) opt.selected = true;
-            categorySelect.appendChild(opt);
-        });
-    }
-
-    // Load đúng category khi mở trang edit
-    updateCategoryOptions(typeSelect.value);
-
-    // Khi đổi type thì reset category
-    typeSelect.addEventListener("change", () => {
-        updateCategoryOptions(typeSelect.value);
-    });
-    </script>
 </form>
 
 
