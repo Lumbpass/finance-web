@@ -10,40 +10,31 @@
   </select>
 
     <label for="category">Danh mục:</label>
-    <select name="category" id="category" required></select>
+    <select name="category" id="category-select" required></select>
     <script>
-    // Nhận CATEGORY_MAP từ Flask
-    const CATEGORY_MAP = {{ CATEGORY_MAP | tojson }};
+        const CATEGORY_MAP = {{ CATEGORY_MAP | tojson }};
 
-    function updateCategory() {
-        const type = document.getElementById("type").value;
-        const categorySelect = document.getElementById("category");
+        function updateCategoryOptions(type) {
+        const select = document.getElementById("category-select");
+        select.innerHTML = "";
 
-        // Xóa toàn bộ option cũ
-        categorySelect.innerHTML = "";
+        if (!CATEGORY_MAP[type]) return;
 
-        // Nếu không có type thì dừng
-        if (!CATEGORY_MAP[type]) {
-            return;
-        }
-
-        // Lấy danh sách category theo type
-        const categories = CATEGORY_MAP[type];
-
-        // Thêm option mới
-        for (const key in categories) {
-            if (categories.hasOwnProperty(key)) {
-                const option = document.createElement("option");
-                option.value = key;
-                option.textContent = categories[key];
-                categorySelect.appendChild(option);
-            }
-        }
+        CATEGORY_MAP[type].forEach(cat => {
+            const opt = document.createElement("option");
+            opt.value = cat;
+            opt.textContent = cat;
+            select.appendChild(opt);
+        });
     }
 
-    // Gọi lần đầu
-    updateCategory();
-</script>
+    document.querySelectorAll("input[name='type']").forEach(radio => {
+        radio.addEventListener("change", e => updateCategoryOptions(e.target.value));
+    });
+
+    // Load mặc định theo loại đang check
+    updateCategoryOptions(document.querySelector("input[name='type']:checked").value);
+    </script>
 
   <label for="amount">Tổng giá trị:</label>
   <input type="number" name="amount" id="amount" step="0.01" required>

@@ -3,55 +3,61 @@
 <h2 style="color:#fff;">Edit Transaction</h2>
 
 <form method="post" class="transaction-form" style="max-width:500px;margin:auto;">
-  <label for="type">Type:</label>
+  <label for="type">Loại:</label>
   <select name="type" id="type">
-    <option value="expense" {% if tx.type == 'expense' %}selected{% endif %}>Expense</option>
-    <option value="income" {% if tx.type == 'income' %}selected{% endif %}>Income</option>
+    <option value="expense" {% if tx.type == 'expense' %}selected{% endif %}>Chi tiêu</option>
+    <option value="income" {% if tx.type == 'income' %}selected{% endif %}>Thu nhập</option>
   </select>
 
-  <label for="category">Category:</label>
+  <label for="category">Danh mục:</label>
   <input type="text" name="category" value="{{ tx.category }}" required>
 
-  <label for="note">Note:</label>
+  <label for="note">Ghi chú:</label>
   <input type="text" name="note" value="{{ tx.note }}">
 
-  <label for="date">Date:</label>
+  <label for="date">Ngày:</label>
   <input type="date" name="date" value="{{ tx.date }}" required>
 
-  <label for="amount">Amount:</label>
+  <label for="amount">Tổng số tiền:</label>
   <input type="number" step="0.01" name="amount" value="{{ tx.amount }}" required>
 
-  <button type="submit" class="add-btn">💾 Save Changes</button>
+  <button type="submit" class="add-btn">💾 Lưu thay đổi</button>
 </form>
 
 <script>
-    // Lấy danh sách category từ Flask
-    const CATEGORY_MAP = JSON.parse(`{{ CATEGORY_MAP | tojson | safe }}`);
+// Khi mở modal edit
+function loadEditForm(data) {
+    // data.type = "income" hoặc "expense"
+    // data.category = category hiện tại
 
-    function updateCategory(selected = null) {
-        const type = document.getElementById("type").value;
-        const categorySelect = document.getElementById("category");
+    // Set radio
+    document.querySelector(`input[name='type-edit'][value='${data.type}']`).checked = true;
 
-        categorySelect.innerHTML = "";
+    // Load category theo type
+    updateEditCategoryOptions(data.type);
 
-        const categories = CATEGORY_MAP[type];
+    // Chọn đúng category cũ
+    document.getElementById("category-select-edit").value = data.category;
+}
 
-        for (const key in categories) {
-            const option = document.createElement("option");
-            option.value = key;
-            option.textContent = categories[key];
+function updateEditCategoryOptions(type) {
+    const select = document.getElementById("category-select-edit");
+    select.innerHTML = "";
 
-            // Nếu đang edit → chọn đúng category cũ
-            if (selected === key) {
-                option.selected = true;
-            }
+    CATEGORY_MAP[type].forEach(cat => {
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+    });
+}
 
-            categorySelect.appendChild(option);
-        }
-    }
-
-    // Khi load trang lần đầu, load đúng type + category của giao dịch
-    updateCategory("{{ tx.category }}");
+// Khi đổi Income / Expense trong form Edit
+document.querySelectorAll("input[name='type-edit']").forEach(r => {
+    r.addEventListener("change", (e) => {
+        updateEditCategoryOptions(e.target.value);
+    });
+});
 </script>
 
 <style>
