@@ -16,7 +16,7 @@ bcrypt.init_app(app)
 MONGO_URI = os.getenv("MONGO_URI")
 
 if not MONGO_URI:
-    print("❌ ERROR: MONGO_URI is missing! Did you set Railway Variables?")
+    print("ERROR: MONGO_URI is missing! Did you set Railway Variables?")
     raise SystemExit()
 client = MongoClient(MONGO_URI)
 db = client["expense_tracker"]

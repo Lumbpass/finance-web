@@ -1,11 +1,13 @@
 # models.py
+import os
 from pymongo import MongoClient
 from bson import ObjectId
 
 # ==============================
 #  KẾT NỐI MONGODB
 # ==============================
-client = MongoClient("mongodb://localhost:27017/")
+MONGO_URI = os.environ.get("MONGO_URI")
+client = MongoClient(MONGO_URI)
 db = client["expense_tracker"]
 
 transactions_col = db["transactions"]
